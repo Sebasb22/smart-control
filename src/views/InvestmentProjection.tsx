@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiTrendingUp } from "react-icons/fi";
 import { FaMoneyBillWave, FaPercent, FaCalendarDay } from "react-icons/fa";

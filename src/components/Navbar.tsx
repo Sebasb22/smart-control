@@ -12,7 +12,7 @@ import {
   FaMoneyBillWave, // <-- Icono para Deudas
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   currentUser: User & { nombre?: string | null };
