@@ -11,7 +11,7 @@ import {
 } from "react-icons/fi";
 
 import React, { useState, useEffect } from "react";
-import { differenceInMonths, differenceInDays } from "date-fns";
+// ...existing code...
 import {
   listenToUserSavings,
   addSaving,
@@ -282,7 +282,9 @@ const SavingDetailView: React.FC<DetailProps> = ({
           <input
             type="number"
             value={goal.montoObjetivo}
-            onChange={(e) => setGoal({ ...goal, montoObjetivo: Number(e.target.value) })}
+            onChange={(e) =>
+              setGoal({ ...goal, montoObjetivo: Number(e.target.value) })
+            }
             className="w-full p-2 border-b border-gray-300 focus:border-blue-500 bg-transparent outline-none transition text-blue-700 font-semibold"
           />
         </div>
@@ -306,7 +308,9 @@ const SavingDetailView: React.FC<DetailProps> = ({
           <input
             type="date"
             value={goal.fechaObjetivo}
-            onChange={(e) => setGoal({ ...goal, fechaObjetivo: e.target.value })}
+            onChange={(e) =>
+              setGoal({ ...goal, fechaObjetivo: e.target.value })
+            }
             className="w-full p-2 border-b border-gray-300 focus:border-blue-500 bg-transparent outline-none transition"
           />
         </div>
@@ -331,11 +335,14 @@ const SavingDetailView: React.FC<DetailProps> = ({
               <FiPlus className="text-green-500" />
             ) : (
               <FiMinus className="text-red-500" />
-            )} Tipo
+            )}{" "}
+            Tipo
           </label>
           <select
             value={manualType}
-            onChange={(e) => setManualType(e.target.value as "ingreso" | "retiro")}
+            onChange={(e) =>
+              setManualType(e.target.value as "ingreso" | "retiro")
+            }
             className="p-2 border rounded-lg w-full"
           >
             <option value="ingreso">Ingreso</option>
@@ -390,8 +397,10 @@ const SavingDetailView: React.FC<DetailProps> = ({
               <ul className="list-disc pl-5">
                 {historialUnico.map((h, idx) => (
                   <li key={`${h.id}-${idx}`}>
-                    {new Date(h.fecha).toLocaleString()}: {h.cambio > 0 ? "+" : ""}
-                    {formatCOP(h.cambio)} {h.comentario ? `(${h.comentario})` : ""}
+                    {new Date(h.fecha).toLocaleString()}:{" "}
+                    {h.cambio > 0 ? "+" : ""}
+                    {formatCOP(h.cambio)}{" "}
+                    {h.comentario ? `(${h.comentario})` : ""}
                   </li>
                 ))}
               </ul>

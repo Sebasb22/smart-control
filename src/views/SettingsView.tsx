@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { auth } from "../firebase/config";
 import { deleteUser } from "firebase/auth";
 import { reauthenticateUser } from "../services/authService";

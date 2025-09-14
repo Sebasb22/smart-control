@@ -48,7 +48,7 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
     setSavings((prev) =>
       prev.map((s) => (s.id === goal.id ? { ...s, ...goal } : s))
     );
-    setSelectedSaving((prev) => ({ ...goal })); // fuerza re-render y muestra el ahorro actualizado
+    setSelectedSaving(goal); // fuerza re-render y muestra el ahorro actualizado
   };
 
   return (
