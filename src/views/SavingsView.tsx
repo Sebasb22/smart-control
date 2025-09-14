@@ -9,10 +9,7 @@ import {
   FiTrash2,
   FiX,
 } from "react-icons/fi";
-// src/views/SavingsView.tsx
-
 import React, { useState, useEffect } from "react";
-// ...existing code...
 import {
   listenToUserSavings,
   addSaving,
@@ -50,13 +47,9 @@ const formatCOP = (value: number) => {
 interface Props {
   currentUser: User;
   initialSaving?: SavingGoal | null;
-  // ...existing code...
 }
 
-const SavingsView: React.FC<Props> = ({
-  currentUser,
-  initialSaving = null,
-}) => {
+const SavingsView: React.FC<Props> = ({ currentUser, initialSaving = null }) => {
   const [savings, setSavings] = useState<SavingGoal[]>([]);
   const [selectedSaving, setSelectedSaving] = useState<SavingGoal | null>(
     initialSaving
@@ -97,32 +90,33 @@ const SavingsView: React.FC<Props> = ({
         fecha: h.fecha,
         cambio: Number(h.cambio),
         comentario: h.comentario || "",
-        id:
-          h.id ||
-          (typeof crypto !== "undefined" && crypto.randomUUID
-            ? crypto.randomUUID()
-            : `${Date.now()}-${Math.random()}`),
+        id: h.id || crypto.randomUUID(),
       })),
     };
+
     if (!goalToSave.id) {
       const id = await addSaving({ ...goalToSave, userId: currentUser.uid });
       const newSaving = { ...goalToSave, id };
-      setSelectedSaving(null); // Oculta el formulario después de guardar
+      setSelectedSaving(null);
       setSavings((prev) => [...prev, newSaving]);
     } else {
       await updateSaving(goalToSave.id, goalToSave);
-      setSelectedSaving(null); // Oculta el formulario después de guardar
+      setSelectedSaving(null);
       setSavings((prev) =>
         prev.map((s) => (s.id === goalToSave.id ? goalToSave : s))
       );
     }
   };
 
-  const handleDelete = async (saving: SavingGoal) => {
-    if (!saving.id) return;
-    await deleteSaving(saving.id);
-    setSelectedSaving(null);
-    setSavings((prev) => prev.filter((s) => s.id !== saving.id));
+  const handleDelete = async (saving: SavingGoal, idx?: number) => {
+    if (saving.id) {
+      await deleteSaving(saving.id);
+      setSelectedSaving(null);
+      setSavings((prev) => prev.filter((s) => s.id !== saving.id));
+    } else if (typeof idx === "number") {
+      setSelectedSaving(null);
+      setSavings((prev) => prev.filter((_, i) => i !== idx));
+    }
   };
 
   return (
@@ -139,17 +133,13 @@ const SavingsView: React.FC<Props> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {savings.map((saving, idx) => (
           <div
-            key={saving.id ? saving.id : `saving-${idx}`}
+            key={saving.id ? `${saving.id}-${idx}` : `saving-${idx}`}
             className="p-4 border rounded-lg hover:shadow-lg relative"
           >
             <button
               onClick={async (e) => {
                 e.stopPropagation();
-                if (saving.id) {
-                  await handleDelete(saving);
-                } else {
-                  setSavings((prev) => prev.filter((_, i) => i !== idx));
-                }
+                await handleDelete(saving, idx);
               }}
               className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-lg text-xs"
             >
@@ -187,6 +177,9 @@ const SavingsView: React.FC<Props> = ({
   );
 };
 
+// -------------------------
+// Detalle del ahorro
+// -------------------------
 interface DetailProps {
   savingData: SavingGoal;
   onSave: (data: SavingGoal) => void;
@@ -205,60 +198,9 @@ const SavingDetailView: React.FC<DetailProps> = ({
   const [manualType, setManualType] = useState<"ingreso" | "retiro">("ingreso");
   const [manualComment, setManualComment] = useState<string>("");
 
-  const [derived, setDerived] = useState({
-    mesesRestantes: 0,
-    diasRestantes: 0,
-    porcentajeAlcanzado: 0,
-    montoRestante: 0,
-    ahorroMensual: 0,
-    estado: "En progreso",
-  });
-
   useEffect(() => {
     setGoal(savingData);
   }, [savingData]);
-
-  useEffect(() => {
-    const hoy = new Date();
-    const fechaObj = new Date(goal.fechaObjetivo);
-    // Calcula meses y días restantes manualmente
-    const diffMs = fechaObj.getTime() - hoy.getTime();
-    const diasRestantes = Math.max(
-      Math.floor(diffMs / (1000 * 60 * 60 * 24)),
-      0
-    );
-    const mesesRestantes = Math.max(Math.floor(diasRestantes / 30), 0);
-    const porcentajeAlcanzado =
-      goal.montoObjetivo > 0
-        ? Math.min((goal.montoAhorrado / goal.montoObjetivo) * 100, 100)
-        : 0;
-    const montoRestante = Math.max(goal.montoObjetivo - goal.montoAhorrado, 0);
-    const ahorroMensual =
-      mesesRestantes > 0 ? montoRestante / mesesRestantes : montoRestante;
-    let estado = "En progreso";
-    if (porcentajeAlcanzado >= 100) estado = "Cumplido";
-    else if (porcentajeAlcanzado < 50) estado = "Retrasado";
-    setDerived({
-      mesesRestantes,
-      diasRestantes,
-      porcentajeAlcanzado,
-      montoRestante,
-      ahorroMensual,
-      estado,
-    });
-  }, [goal]);
-
-  const handleChange = (
-    field: "montoObjetivo" | "montoAhorrado" | "fechaObjetivo",
-    value: string
-  ) => {
-    if (field === "fechaObjetivo") {
-      setGoal({ ...goal, fechaObjetivo: value });
-    } else {
-      const numericValue = value.replace(/\D/g, ""); // solo números
-      setGoal({ ...goal, [field]: Number(numericValue) });
-    }
-  };
 
   const handleManualSubmit = () => {
     if (manualAmount === 0) return;
@@ -272,18 +214,11 @@ const SavingDetailView: React.FC<DetailProps> = ({
           fecha: new Date().toISOString(),
           cambio,
           comentario: manualComment || "",
-          id:
-            typeof crypto !== "undefined" && crypto.randomUUID
-              ? crypto.randomUUID()
-              : `${Date.now()}-${Math.random()}`,
+          id: crypto.randomUUID(),
         },
         ...goal.historial.map((h) => ({
           ...h,
-          id:
-            h.id ||
-            (typeof crypto !== "undefined" && crypto.randomUUID
-              ? crypto.randomUUID()
-              : `${Date.now()}-${Math.random()}`),
+          id: h.id || crypto.randomUUID(),
         })),
       ],
     };
@@ -297,7 +232,7 @@ const SavingDetailView: React.FC<DetailProps> = ({
   return (
     <div className="mt-6 p-6 bg-white shadow-md rounded-xl border border-gray-200 max-w-xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <h3 className="text-xl font-light text-gray-700 flex items-center gap-2 tracking-tight">
           <FiTarget className="inline-block text-blue-500" /> Detalle del Ahorro
         </h3>
         {onClose && (
@@ -311,10 +246,11 @@ const SavingDetailView: React.FC<DetailProps> = ({
         )}
       </div>
 
+      {/* Datos básicos */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="flex items-center gap-1 font-semibold text-gray-600 mb-1">
-            <FiEdit2 className="text-gray-400" /> Nombre del objetivo
+          <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
+            <FiEdit2 className="text-gray-400" /> Nombre del ahorro
           </label>
           <input
             type="text"
@@ -325,7 +261,7 @@ const SavingDetailView: React.FC<DetailProps> = ({
         </div>
 
         <div className="md:col-span-2">
-          <label className="flex items-center gap-1 font-semibold text-gray-600 mb-1">
+          <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
             <FiEdit2 className="text-gray-400" /> Descripción
           </label>
           <textarea
@@ -337,57 +273,65 @@ const SavingDetailView: React.FC<DetailProps> = ({
         </div>
 
         <div>
-          <label className="flex items-center gap-1 font-semibold text-gray-600 mb-1">
-            <FiDollarSign className="text-green-400" /> Monto objetivo
+          <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
+            <FiDollarSign className="text-blue-400" /> Monto objetivo
           </label>
           <input
             type="text"
-            value={goal.montoObjetivo}
-            onChange={(e) => handleChange("montoObjetivo", e.target.value)}
-            className="w-full p-2 border-b border-gray-300 focus:border-green-500 bg-transparent outline-none transition text-green-700 font-semibold"
+            value={goal.montoObjetivo.toLocaleString("es-CO")}
+            onChange={(e) => {
+              const numericValue = e.target.value.replace(/\D/g, "");
+              setGoal({ ...goal, montoObjetivo: Number(numericValue) });
+            }}
+            className="w-full p-2 border-b border-gray-300 focus:border-blue-500 bg-transparent outline-none transition text-blue-700 font-semibold"
           />
         </div>
 
         <div>
-          <label className="flex items-center gap-1 font-semibold text-gray-600 mb-1">
+          <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
             <FiDollarSign className="text-green-400" /> Monto ahorrado
           </label>
           <input
             type="text"
-            value={goal.montoAhorrado}
-            onChange={(e) => handleChange("montoAhorrado", e.target.value)}
-            className="w-full p-2 border-b border-gray-300 focus:border-green-500 bg-transparent outline-none transition text-green-700 font-semibold"
+            value={goal.montoAhorrado.toLocaleString("es-CO")}
+            readOnly
+            className="w-full p-2 border-b border-gray-300 bg-gray-100 outline-none transition text-green-700 font-semibold"
           />
         </div>
 
         <div>
-          <label className="flex items-center gap-1 font-semibold text-gray-600 mb-1">
+          <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
             <FiCalendar className="text-blue-400" /> Fecha objetivo
           </label>
           <input
             type="date"
             value={goal.fechaObjetivo}
-            onChange={(e) => handleChange("fechaObjetivo", e.target.value)}
+            onChange={(e) =>
+              setGoal({ ...goal, fechaObjetivo: e.target.value })
+            }
             className="w-full p-2 border-b border-gray-300 focus:border-blue-500 bg-transparent outline-none transition"
           />
         </div>
       </div>
 
-      {/* Resto de la UI como depósito manual, botones y valores derivados */}
+      {/* Depósito manual */}
       <div className="mt-4 flex gap-2 items-end">
         <div>
-          <label className="flex items-center gap-1 font-semibold text-gray-600 mb-1">
+          <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
             <FiDollarSign className="text-gray-400" /> Monto
           </label>
           <input
-            type="number"
-            value={manualAmount}
-            onChange={(e) => setManualAmount(Number(e.target.value))}
+            type="text"
+            value={manualAmount.toLocaleString("es-CO")}
+            onChange={(e) => {
+              const numericValue = e.target.value.replace(/\D/g, "");
+              setManualAmount(Number(numericValue));
+            }}
             className="p-2 border rounded-lg w-full"
           />
         </div>
         <div>
-          <label className="flex items-center gap-1 font-semibold text-gray-600 mb-1">
+          <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
             {manualType === "ingreso" ? (
               <FiPlus className="text-green-500" />
             ) : (
@@ -407,7 +351,7 @@ const SavingDetailView: React.FC<DetailProps> = ({
           </select>
         </div>
         <div>
-          <label className="flex items-center gap-1 font-semibold text-gray-600 mb-1">
+          <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
             <FiEdit2 className="text-gray-400" /> Comentario (opcional)
           </label>
           <input
@@ -425,71 +369,45 @@ const SavingDetailView: React.FC<DetailProps> = ({
         </button>
       </div>
 
+      {/* Botones */}
       <div className="mt-4 flex gap-2">
         <button
           onClick={() => onSave(goal)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-light tracking-tight"
         >
-          <FiSave /> Guardar Ahorro
+          <FiSave /> Guardar Cambios
         </button>
         <button
           onClick={() => onDelete(goal)}
-          className="bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          className="bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-light tracking-tight"
         >
           <FiTrash2 /> Eliminar Ahorro
         </button>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
-        <div>
-          <p>Meses restantes:</p>
-          <p>{derived.mesesRestantes}</p>
-        </div>
-        <div>
-          <p>Días restantes:</p>
-          <p>{derived.diasRestantes}</p>
-        </div>
-        <div>
-          <p>Porcentaje alcanzado:</p>
-          <p>{derived.porcentajeAlcanzado.toFixed(2)}%</p>
-        </div>
-        <div>
-          <p>Monto restante:</p>
-          <p>{formatCOP(derived.montoRestante)}</p>
-        </div>
-        <div>
-          <p>Ahorro mensual recomendado:</p>
-          <p>{formatCOP(derived.ahorroMensual)}</p>
-        </div>
-        <div className="md:col-span-2">
-          <p>Estado:</p>
-          <p
-            className={`font-semibold ${
-              derived.estado === "Cumplido"
-                ? "text-green-600"
-                : derived.estado === "En progreso"
-                ? "text-yellow-600"
-                : "text-red-600"
-            }`}
-          >
-            {derived.estado}
-          </p>
-        </div>
-      </div>
-
+      {/* Historial */}
       {goal.historial.length > 0 && (
         <div className="mt-6 bg-gray-100 p-4 rounded-lg">
-          <h3 className="font-bold mb-2 flex items-center gap-2">
-            <FiEdit2 /> Historial
+          <h3 className="font-light mb-2 flex items-center gap-2 tracking-tight">
+            <FiEdit2 /> Historial de Movimientos
           </h3>
-          <ul className="list-disc pl-5">
-            {goal.historial.map((h, idx) => (
-              <li key={h.id ? h.id : `${h.fecha}-${h.comentario}-${idx}`}>
-                {new Date(h.fecha).toLocaleString()}: {h.cambio > 0 ? "+" : ""}
-                {formatCOP(h.cambio)} {h.comentario ? `(${h.comentario})` : ""}
-              </li>
-            ))}
-          </ul>
+          {(() => {
+            const historialUnico = Array.from(
+              new Map(goal.historial.map((h) => [h.id, h])).values()
+            );
+            return (
+              <ul className="list-disc pl-5">
+                {historialUnico.map((h, idx) => (
+                  <li key={`${h.id}-${idx}`}>
+                    {new Date(h.fecha).toLocaleString()}:{" "}
+                    {h.cambio > 0 ? "+" : ""}
+                    {formatCOP(h.cambio)}{" "}
+                    {h.comentario ? `(${h.comentario})` : ""}
+                  </li>
+                ))}
+              </ul>
+            );
+          })()}
         </div>
       )}
     </div>

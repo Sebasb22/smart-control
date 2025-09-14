@@ -15,6 +15,7 @@ import Navbar from "./components/Navbar";
 import InvestmentProjection from "./views/InvestmentProjection";
 import SavingsView from "./views/SavingsView";
 import DebtsView from "./views/DebtsView";
+import SettingsView from "./views/SettingsView";
 interface AppUser extends User {
   nombre?: string | null;
 }
@@ -110,6 +111,7 @@ function App() {
               path="/debts"
               element={<DebtsView currentUser={currentUser} />}
             />
+            <Route path="/settings" element={<SettingsView />} />
           </Routes>
         </div>
       </div>

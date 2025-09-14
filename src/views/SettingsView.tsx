@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { auth } from "../firebase/config";
 import { deleteUser } from "firebase/auth";
-// ...existing code...
+import { reauthenticateUser } from "../services/authService";
 import { deleteUserData } from "../services/userService";
 
 export default function SettingsView() {
@@ -15,14 +15,13 @@ export default function SettingsView() {
     );
 
     if (!confirmDelete) return;
-
     if (!currentUser) return;
 
     try {
       setLoading(true);
 
       // Paso 1: Reautenticar
-      // ...existing code...
+      await reauthenticateUser(currentUser, password);
 
       // Paso 2: Eliminar datos del usuario en Firestore
       await deleteUserData(currentUser.uid);
@@ -83,19 +82,6 @@ export default function SettingsView() {
           {loading ? "Eliminando..." : "Eliminar cuenta y todos los datos"}
         </button>
       </div>
-
-      {/* Mensajes */}
-      {/* {message && (
-        <div
-          className={`mt-4 p-3 rounded-lg text-center ${
-            message.includes("✅")
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {message}
-        </div>
-      )} */}
     </div>
   );
 }

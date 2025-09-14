@@ -110,7 +110,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
                   {
                     label: "Configuración",
                     icon: <FaCog className="text-blue-600 w-5 h-5" />,
-                    action: () => alert("Configuración en construcción"),
+                    path: "/settings", // <-- Nueva ruta para configuración
                   },
                   {
                     label: "Cerrar sesión",
