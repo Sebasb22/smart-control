@@ -1,5 +1,5 @@
 // src/components/Login.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { signInWithPopup, signOut } from "firebase/auth";
 import type { User, UserCredential } from "firebase/auth";
 import { auth, googleProvider, db } from "../firebase/config";

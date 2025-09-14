@@ -1,69 +1,119 @@
-# React + TypeScript + Vite
+# 💸 Smart Control - Gastos App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Smart Control Banner](https://user-images.githubusercontent.com/placeholder/banner.png)
 
-Currently, two official plugins are available:
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18-blue?logo=react" />
+  <img src="https://img.shields.io/badge/TailwindCSS-3.0-38bdf8?logo=tailwindcss" />
+  <img src="https://img.shields.io/badge/Firebase-9.0-ffca28?logo=firebase" />
+  <img src="https://img.shields.io/badge/TypeScript-4.0-3178c6?logo=typescript" />
+  <img src="https://img.shields.io/badge/Vite-4.0-646cff?logo=vite" />
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Descripción
 
-## Expanding the ESLint configuration
+**Smart Control** es una aplicación web moderna para la gestión de finanzas personales, ahorros y gastos. Permite llevar el control de tus cuentas, visualizar proyecciones, registrar movimientos y mantener tus finanzas organizadas de forma profesional y segura.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🧩 Tecnologías principales
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- ⚛️ **React** + **TypeScript**
+- 🎨 **Tailwind CSS** para estilos modernos y responsivos
+- 🔥 **Firebase** (Auth + Firestore)
+- ⚡ **Vite** para desarrollo ultra-rápido
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## ✨ Funcionalidades
+
+- 📊 Dashboard de resumen financiero
+- 💰 Registro y seguimiento de ahorros
+- 📝 Historial de movimientos
+- 🔒 Autenticación con Google y correo
+- 📱 Diseño 100% responsive (móvil, tablet, desktop)
+- 📈 Proyección de inversiones y metas
+- 🧹 Migración automática de datos duplicados
+
+---
+
+## 🛠️ Instalación y uso
+
+```bash
+# Clona el repositorio
+$ git clone https://github.com/Sebasb22/smart-control.git
+
+# Instala dependencias
+$ cd my-gastos
+$ npm install
+
+# Inicia el servidor de desarrollo
+$ npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔑 Configuración Firebase
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Crea un proyecto en [Firebase Console](https://console.firebase.google.com/).
+2. Habilita Firestore y Authentication (Google y Email/Password).
+3. Copia tu configuración en `src/firebase/config.ts`:
+
+```ts
+export const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "...",
+};
 ```
+
+---
+
+## 🧑‍💻 Estructura del proyecto
+
+```
+my-gastos/
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── firebase/
+│   ├── services/
+│   ├── views/
+│   ├── App.tsx
+│   ├── index.css
+│   └── ...
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── README.md
+```
+
+---
+
+## 📝 Scripts útiles
+
+- `npm run dev` — Inicia el servidor de desarrollo
+- `npm run build` — Compila la app para producción
+- `npm run lint` — Linting de código
+
+---
+
+## 🦾 Contribuciones
+
+¡Las contribuciones son bienvenidas! Abre un issue o pull request para sugerencias, mejoras o reportar bugs.
+
+---
+
+## 📄 Licencia
+
+MIT © [Sebasb22](https://github.com/Sebasb22)
+
+---
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/placeholder/app-preview.png" width="600" />
+</p>

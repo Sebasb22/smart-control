@@ -12,7 +12,7 @@ import {
 // src/views/SavingsView.tsx
 
 import React, { useState, useEffect } from "react";
-import { differenceInMonths, differenceInDays } from "date-fns";
+// ...existing code...
 import {
   listenToUserSavings,
   addSaving,
@@ -50,13 +50,12 @@ const formatCOP = (value: number) => {
 interface Props {
   currentUser: User;
   initialSaving?: SavingGoal | null;
-  onSave?: (data: SavingGoal) => void;
+  // ...existing code...
 }
 
 const SavingsView: React.FC<Props> = ({
   currentUser,
   initialSaving = null,
-  onSave,
 }) => {
   const [savings, setSavings] = useState<SavingGoal[]>([]);
   const [selectedSaving, setSelectedSaving] = useState<SavingGoal | null>(
@@ -90,11 +89,6 @@ const SavingsView: React.FC<Props> = ({
   };
 
   const handleSave = async (data: SavingGoal) => {
-    if (onSave) {
-      await onSave(data);
-      setSelectedSaving(null); // Oculta el formulario después de guardar
-      return;
-    }
     const goalToSave = {
       ...data,
       montoObjetivo: Number(data.montoObjetivo) || 0,
@@ -227,8 +221,13 @@ const SavingDetailView: React.FC<DetailProps> = ({
   useEffect(() => {
     const hoy = new Date();
     const fechaObj = new Date(goal.fechaObjetivo);
-    const mesesRestantes = Math.max(differenceInMonths(fechaObj, hoy), 0);
-    const diasRestantes = Math.max(differenceInDays(fechaObj, hoy), 0);
+    // Calcula meses y días restantes manualmente
+    const diffMs = fechaObj.getTime() - hoy.getTime();
+    const diasRestantes = Math.max(
+      Math.floor(diffMs / (1000 * 60 * 60 * 24)),
+      0
+    );
+    const mesesRestantes = Math.max(Math.floor(diasRestantes / 30), 0);
     const porcentajeAlcanzado =
       goal.montoObjetivo > 0
         ? Math.min((goal.montoAhorrado / goal.montoObjetivo) * 100, 100)
