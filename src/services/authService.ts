@@ -5,6 +5,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  EmailAuthProvider,
+  GoogleAuthProvider,
+  reauthenticateWithPopup,
+  reauthenticateWithCredential,
 } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -128,5 +132,35 @@ export const logoutUser = async () => {
   } catch (error: any) {
     console.error("❌ Error al cerrar sesión:", error.message);
     throw new Error("No se pudo cerrar la sesión. Intenta nuevamente.");
+  }
+};
+
+/**
+ * Reautentica al usuario antes de hacer acciones críticas como eliminar cuenta
+ */
+export const reauthenticateUser = async (user: User, password?: string) => {
+  try {
+    // Caso 1: Usuario con Google
+    if (user.providerData[0]?.providerId === "google.com") {
+      const provider = new GoogleAuthProvider();
+      await reauthenticateWithPopup(user, provider);
+      console.log("Reautenticado con Google ✅");
+    }
+
+    // Caso 2: Usuario con Email y Contraseña
+    else if (user.providerData[0]?.providerId === "password") {
+      if (!password) {
+        throw new Error("Debes ingresar la contraseña para reautenticación.");
+      }
+
+      const credential = EmailAuthProvider.credential(user.email!, password);
+      await reauthenticateWithCredential(user, credential);
+      console.log("Reautenticado con Email y Contraseña ✅");
+    } else {
+      throw new Error("Método de autenticación no soportado.");
+    }
+  } catch (error) {
+    console.error("Error durante reautenticación:", error);
+    throw error;
   }
 };

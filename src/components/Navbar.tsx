@@ -12,7 +12,7 @@ import {
   FaMoneyBillWave, // <-- Icono para Deudas
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 interface NavbarProps {
   currentUser: User & { nombre?: string | null };
@@ -110,7 +110,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
                   {
                     label: "Configuración",
                     icon: <FaCog className="text-blue-600 w-5 h-5" />,
-                    action: () => alert("Configuración en construcción"),
+                    path: "/settings", // <-- Nueva ruta para configuración
                   },
                   {
                     label: "Cerrar sesión",
