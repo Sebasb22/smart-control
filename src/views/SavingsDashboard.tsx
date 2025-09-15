@@ -1,6 +1,6 @@
 // src/views/SavingsDashboard.tsx
 import React, { useState, useEffect } from "react";
-import { listenToUserSavings, addSaving, updateSaving } from "../services/savingsService";
+import { listenToUserSavings, addSaving } from "../services/savingsService";
 import type { User } from "firebase/auth";
 import SavingsView, { type SavingGoal } from "./SavingsView";
 
@@ -41,18 +41,6 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
     setSelectedSaving(saving);
   };
 
-  // Actualizar un ahorro existente
-  const handleUpdateSaving = async (goal: SavingGoal) => {
-    if (!goal.id) return;
-    await updateSaving(goal.id, goal);
-    
-    // Actualizamos la lista principal en tiempo real
-    setSavings((prev) =>
-      prev.map((s) => (s.id === goal.id ? { ...s, ...goal } : s))
-    );
-    setSelectedSaving(goal); // fuerza re-render y muestra el ahorro actualizado
-  };
-
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Mis Ahorros</h2>
@@ -90,7 +78,6 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
           <SavingsView
             currentUser={currentUser}
             initialSaving={selectedSaving}
-            onUpdateSaving={handleUpdateSaving} // <- Se pasa para actualizar
           />
         </div>
       )}
