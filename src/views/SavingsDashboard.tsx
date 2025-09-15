@@ -1,6 +1,10 @@
 // src/views/SavingsDashboard.tsx
 import React, { useState, useEffect } from "react";
-import { listenToUserSavings, addSaving } from "../services/savingsService";
+import {
+  listenToUserSavings,
+  addSaving,
+  updateSaving,
+} from "../services/savingsService";
 import type { User } from "firebase/auth";
 import SavingsView, { type SavingGoal } from "./SavingsView";
 
@@ -41,6 +45,19 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
     setSelectedSaving(saving);
   };
 
+  // Actualizar un ahorro
+  const handleUpdateSaving = async (goal: SavingGoal) => {
+    if (!goal.id) return;
+    await updateSaving(goal.id, goal);
+
+    // Actualizamos la lista principal en tiempo real
+    setSavings((prev) =>
+      prev.map((s) => (s.id === goal.id ? { ...s, ...goal } : s))
+    );
+
+    setSelectedSaving(goal); // Forzar re-render para mostrar cambios
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Mis Ahorros</h2>
@@ -52,6 +69,7 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
         + Agregar Ahorro
       </button>
 
+      {/* Lista de ahorros */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {savings.map((saving) => (
           <div
@@ -72,12 +90,14 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
         ))}
       </div>
 
+      {/* Detalle del ahorro seleccionado */}
       {selectedSaving && (
         <div className="mt-6">
           <h3 className="text-xl font-bold mb-2">Detalle del Ahorro</h3>
           <SavingsView
             currentUser={currentUser}
             initialSaving={selectedSaving}
+            onUpdateSaving={handleUpdateSaving} // ✅ Prop ahora correctamente pasada
           />
         </div>
       )}
