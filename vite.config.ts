@@ -7,4 +7,5 @@ export default defineConfig({
     react(),
     tailwindcss(), // ✅ Agregar plugin de Tailwind
   ],
+  base: "/",
 });
