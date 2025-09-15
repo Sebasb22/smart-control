@@ -9,9 +9,7 @@ import {
   FiTrash2,
   FiX,
 } from "react-icons/fi";
-
 import React, { useState, useEffect } from "react";
-// ...existing code...
 import {
   listenToUserSavings,
   addSaving,
@@ -49,14 +47,9 @@ const formatCOP = (value: number) => {
 interface Props {
   currentUser: User;
   initialSaving?: SavingGoal | null;
-  onSave?: (data: SavingGoal) => void;
 }
 
-const SavingsView: React.FC<Props> = ({
-  currentUser,
-  initialSaving = null,
-  onSave,
-}) => {
+const SavingsView: React.FC<Props> = ({ currentUser, initialSaving = null }) => {
   const [savings, setSavings] = useState<SavingGoal[]>([]);
   const [selectedSaving, setSelectedSaving] = useState<SavingGoal | null>(
     initialSaving
@@ -184,6 +177,9 @@ const SavingsView: React.FC<Props> = ({
   );
 };
 
+// -------------------------
+// Detalle del ahorro
+// -------------------------
 interface DetailProps {
   savingData: SavingGoal;
   onSave: (data: SavingGoal) => void;
@@ -250,6 +246,7 @@ const SavingDetailView: React.FC<DetailProps> = ({
         )}
       </div>
 
+      {/* Datos básicos */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="flex items-center gap-1 font-light text-gray-500 mb-1 tracking-tight">
@@ -280,11 +277,12 @@ const SavingDetailView: React.FC<DetailProps> = ({
             <FiDollarSign className="text-blue-400" /> Monto objetivo
           </label>
           <input
-            type="number"
-            value={goal.montoObjetivo}
-            onChange={(e) =>
-              setGoal({ ...goal, montoObjetivo: Number(e.target.value) })
-            }
+            type="text"
+            value={goal.montoObjetivo.toLocaleString("es-CO")}
+            onChange={(e) => {
+              const numericValue = e.target.value.replace(/\D/g, "");
+              setGoal({ ...goal, montoObjetivo: Number(numericValue) });
+            }}
             className="w-full p-2 border-b border-gray-300 focus:border-blue-500 bg-transparent outline-none transition text-blue-700 font-semibold"
           />
         </div>
@@ -294,8 +292,8 @@ const SavingDetailView: React.FC<DetailProps> = ({
             <FiDollarSign className="text-green-400" /> Monto ahorrado
           </label>
           <input
-            type="number"
-            value={goal.montoAhorrado}
+            type="text"
+            value={goal.montoAhorrado.toLocaleString("es-CO")}
             readOnly
             className="w-full p-2 border-b border-gray-300 bg-gray-100 outline-none transition text-green-700 font-semibold"
           />
@@ -323,9 +321,12 @@ const SavingDetailView: React.FC<DetailProps> = ({
             <FiDollarSign className="text-gray-400" /> Monto
           </label>
           <input
-            type="number"
-            value={manualAmount}
-            onChange={(e) => setManualAmount(Number(e.target.value))}
+            type="text"
+            value={manualAmount.toLocaleString("es-CO")}
+            onChange={(e) => {
+              const numericValue = e.target.value.replace(/\D/g, "");
+              setManualAmount(Number(numericValue));
+            }}
             className="p-2 border rounded-lg w-full"
           />
         </div>
@@ -368,6 +369,7 @@ const SavingDetailView: React.FC<DetailProps> = ({
         </button>
       </div>
 
+      {/* Botones */}
       <div className="mt-4 flex gap-2">
         <button
           onClick={() => onSave(goal)}
@@ -383,7 +385,7 @@ const SavingDetailView: React.FC<DetailProps> = ({
         </button>
       </div>
 
-      {/* Historial deduplicado y con keys seguras */}
+      {/* Historial */}
       {goal.historial.length > 0 && (
         <div className="mt-6 bg-gray-100 p-4 rounded-lg">
           <h3 className="font-light mb-2 flex items-center gap-2 tracking-tight">

@@ -1,10 +1,6 @@
 // src/views/SavingsDashboard.tsx
 import React, { useState, useEffect } from "react";
-import {
-  listenToUserSavings,
-  addSaving,
-  updateSaving,
-} from "../services/savingsService";
+import { listenToUserSavings, addSaving, updateSaving } from "../services/savingsService";
 import type { User } from "firebase/auth";
 import SavingsView, { type SavingGoal } from "./SavingsView";
 
@@ -16,12 +12,14 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
   const [savings, setSavings] = useState<SavingGoal[]>([]);
   const [selectedSaving, setSelectedSaving] = useState<SavingGoal | null>(null);
 
+  // Escuchar cambios en los ahorros del usuario
   useEffect(() => {
     if (!currentUser) return;
     const unsubscribe = listenToUserSavings(currentUser.uid, setSavings);
     return unsubscribe;
   }, [currentUser]);
 
+  // Crear un nuevo ahorro
   const handleAddSaving = async () => {
     const newSaving: SavingGoal = {
       id: "", // Firebase generará el ID
@@ -33,17 +31,21 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
       fechaObjetivo: new Date().toISOString().split("T")[0],
       historial: [],
     };
+
     const id = await addSaving({ ...newSaving, userId: currentUser.uid });
     setSelectedSaving({ ...newSaving, id });
   };
 
+  // Seleccionar un ahorro para ver detalle
   const handleSelectSaving = (saving: SavingGoal) => {
     setSelectedSaving(saving);
   };
 
+  // Actualizar un ahorro existente
   const handleUpdateSaving = async (goal: SavingGoal) => {
     if (!goal.id) return;
     await updateSaving(goal.id, goal);
+    
     // Actualizamos la lista principal en tiempo real
     setSavings((prev) =>
       prev.map((s) => (s.id === goal.id ? { ...s, ...goal } : s))
@@ -88,7 +90,7 @@ const SavingsDashboard: React.FC<Props> = ({ currentUser }) => {
           <SavingsView
             currentUser={currentUser}
             initialSaving={selectedSaving}
-            onSave={handleUpdateSaving}
+            onUpdateSaving={handleUpdateSaving} // <- Se pasa para actualizar
           />
         </div>
       )}

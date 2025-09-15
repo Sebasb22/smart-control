@@ -15,7 +15,6 @@ export default function SettingsView() {
     );
 
     if (!confirmDelete) return;
-
     if (!currentUser) return;
 
     try {
@@ -83,19 +82,6 @@ export default function SettingsView() {
           {loading ? "Eliminando..." : "Eliminar cuenta y todos los datos"}
         </button>
       </div>
-
-      {/* Mensajes */}
-      {/* {message && (
-        <div
-          className={`mt-4 p-3 rounded-lg text-center ${
-            message.includes("✅")
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {message}
-        </div>
-      )} */}
     </div>
   );
 }
