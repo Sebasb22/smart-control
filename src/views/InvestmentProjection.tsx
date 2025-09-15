@@ -83,7 +83,11 @@ export default function InvestmentProjection() {
             type="text"
             placeholder="Ingresa el porcentaje"
             value={profitability}
-            onChange={(e) => setProfitability(formatAmount(e.target.value))}
+            onChange={(e) => {
+              // Permite solo números y punto decimal, sin formatear en tiempo real
+              const val = e.target.value.replace(/[^0-9.]/g, "");
+              setProfitability(val);
+            }}
             className="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition shadow-sm text-right"
           />
           <select
