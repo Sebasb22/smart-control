@@ -1,6 +1,8 @@
 # 💸 Smart Control - Gastos App
 
-![Smart Control Banner](https://user-images.githubusercontent.com/placeholder/banner.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/placeholder/banner.png" alt="Smart Control Banner" />
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-18-blue?logo=react" />
@@ -12,23 +14,23 @@
 
 ## 🚀 Descripción
 
-**Smart Control** es una aplicación web moderna para la gestión de finanzas personales, ahorros y gastos. Permite llevar el control de tus cuentas, visualizar proyecciones, registrar movimientos y mantener tus finanzas organizadas de forma profesional y segura.
+**Smart Control** es una aplicación web moderna y profesional para la gestión de finanzas personales, ahorros y gastos. Permite llevar el control de tus cuentas, visualizar proyecciones, registrar movimientos y mantener tus finanzas organizadas de forma segura y eficiente.
 
 ---
 
 ## 🧩 Tecnologías principales
 
 - ⚛️ **React** + **TypeScript**
-- 🎨 **Tailwind CSS** para estilos modernos y responsivos
+- 🎨 **Tailwind CSS** (estilos modernos y responsivos)
 - 🔥 **Firebase** (Auth + Firestore)
-- ⚡ **Vite** para desarrollo ultra-rápido
+- ⚡ **Vite** (desarrollo ultra-rápido)
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Funcionalidades principales
 
 - 📊 Dashboard de resumen financiero
-- 💰 Registro y seguimiento de ahorros
+- 💰 Registro y seguimiento de ahorros y deudas
 - 📝 Historial de movimientos
 - 🔒 Autenticación con Google y correo
 - 📱 Diseño 100% responsive (móvil, tablet, desktop)
@@ -53,7 +55,7 @@ $ npm run dev
 
 ---
 
-## 🔑 Configuración Firebase
+## 🔑 Configuración de Firebase
 
 1. Crea un proyecto en [Firebase Console](https://console.firebase.google.com/).
 2. Habilita Firestore y Authentication (Google y Email/Password).
@@ -72,7 +74,7 @@ export const firebaseConfig = {
 
 ---
 
-## 🧑‍💻 Estructura del proyecto
+## �️ Estructura del proyecto
 
 ```
 my-gastos/
@@ -102,9 +104,9 @@ my-gastos/
 
 ---
 
-## 🦾 Contribuciones
+## � Contribuciones
 
-¡Las contribuciones son bienvenidas! Abre un issue o pull request para sugerencias, mejoras o reportar bugs.
+Las contribuciones son bienvenidas. Abre un issue o pull request para sugerencias, mejoras o reportar bugs.
 
 ---
 
@@ -115,7 +117,7 @@ MIT © [Sebasb22](https://github.com/Sebasb22)
 ---
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/placeholder/app-preview.png" width="600" />
+  <img src="https://user-images.githubusercontent.com/placeholder/app-preview.png" width="600" alt="Smart Control App Preview" />
 </p>
 
 ## Futuras Actualiaciones (Features)
@@ -170,74 +172,28 @@ Mostrar el gasto promedio diario, semanal y mensual.
 
 Identificar en qué categorías se gasta más.
 
-💡 Recomendaciones automáticas
-
-Usar reglas simples:
-
-"Tu gasto en entretenimiento aumentó un 20% este mes."
-
-"Si ahorras $200.000 más, cumplirás tu meta antes de la fecha límite."
-
-Más adelante podrías aplicar Machine Learning con modelos simples en Python.
-
-3. Funciones sociales / colaborativas
-
-Si quieres que sea más que una app personal:
-
-👥 Cuentas compartidas
-
-Parejas, familias o roommates pueden compartir una cuenta y registrar gastos conjuntos.
-
-Cada usuario ve quién agregó cada gasto.
-
-💬 Notas y comentarios
-
-Añadir comentarios a gastos o metas.
-
-Ejemplo: "Este gasto fue por la cena del cumpleaños de Camila."
-
-🏆 Retos de ahorro gamificados
-
-Crear desafíos como: "Ahorrar $500.000 este mes".
-
-Progreso visual y recompensas virtuales.
-
-4. Integraciones externas
-
-Para automatizar y conectar tu app con otras herramientas:
-
-🏦 Integración bancaria (futuro avanzado)
-
-Conectar la app con APIs bancarias para importar gastos automáticamente.
-
-Esto depende de la regulación en Colombia (Open Banking).
-
-📱 Sincronización con Google Calendar
-
-Programar recordatorios de pagos recurrentes.
-
-💼 Exportación de datos
-
-Exportar gastos a Excel o PDF.
-
-Ideal para reportes financieros.
-
-💳 Métodos de pago integrados
-
 ---
 
-## 🔮 Futuras Actualizaciones
+## � Futuras Actualizaciones
 
-- 💳 **Pagos integrados:** Integrar Stripe o PayU para permitir el pago de deudas y metas directamente desde la app.
+- 📌 **Categorías personalizables:** Crea y edita categorías con íconos y colores.
+- 💰 **Metas de ahorro avanzadas:** Múltiples objetivos, barra de progreso y notificaciones.
+- 🔒 **Seguridad:** 2FA, gestión de sesiones y recuperación de contraseña personalizada.
+- 📊 **Dashboard avanzado:** Gráficas interactivas, filtros y reportes inteligentes.
+- 💡 **Recomendaciones automáticas:** Tips y alertas basados en tus hábitos financieros.
+- 👥 **Cuentas compartidas:** Gastos colaborativos para familias, parejas o roommates.
+- 💬 **Notas y comentarios:** Añade contexto a tus gastos y metas.
+- 🏆 **Retos gamificados:** Desafíos de ahorro con recompensas virtuales.
+- 🏦 **Integración bancaria:** Importa gastos automáticamente (Open Banking futuro).
+- 📱 **Sincronización con Google Calendar:** Recordatorios de pagos recurrentes.
+- 💼 **Exportación de datos:** Descarga tus gastos en Excel o PDF.
+- 💳 **Pagos integrados:** Stripe o PayU para pagar deudas y metas.
+- � **Modo oscuro:** Tema claro/oscuro con persistencia por usuario.
+- 📲 **PWA:** Instala la app como móvil y trabaja offline.
+- 🎙 **Asistente de voz:** Registra gastos usando comandos de voz.
+- 📈 **Analytics:** Google Analytics/Mixpanel para métricas y mejoras.
+- 🚀 **Notificaciones push:** Avisos de gastos, metas y alertas en tiempo real.
+- 📢 **Centro de anuncios:** Actualizaciones y tips financieros en la interfaz.
+  🏦 Integración bancaria (futuro avanzado)
 
-- 🌙 **Modo oscuro:** Tema claro/oscuro con persistencia personalizada por usuario para mayor comodidad visual.
-
-- 📲 **PWA (Progressive Web App):** Instala la app como aplicación móvil desde el navegador y trabaja offline gracias a service workers.
-
-- 🎙 **Asistente de voz:** Registra gastos automáticamente usando comandos de voz como "Gasté 50.000 en transporte y 25.000 en comida" mediante la Web Speech API.
-
-- 📈 **Analytics y métricas:** Integrar Google Analytics o Mixpanel para analizar el comportamiento de los usuarios y mejorar la experiencia.
-
-- 🚀 **Notificaciones push:** Recibe avisos de gastos recurrentes, metas cumplidas y alertas de sobre gasto en tiempo real.
-
-- 📢 **Centro de anuncios:** Visualiza actualizaciones importantes de la app y tips financieros directamente en la interfaz.
+Conectar la app con APIs bancarias para importar gastos automáticamente.
