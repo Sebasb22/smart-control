@@ -131,7 +131,6 @@ MIT © [Sebasb22](https://github.com/Sebasb22)
 - 📊 **Dashboard avanzado:** Gráficas interactivas, filtros y reportes inteligentes.
 - 💡 **Recomendaciones automáticas:** Tips y alertas basados en tus hábitos financieros.
 - 👥 **Cuentas compartidas:** Gastos colaborativos para familias, parejas o roommates.
-- 💬 **Notas y comentarios:** Añade contexto a tus gastos y metas.
 - 🏆 **Retos gamificados:** Desafíos de ahorro con recompensas virtuales.
 - 🏦 **Integración bancaria:** Importa gastos automáticamente (Open Banking futuro).
 - 📱 **Sincronización con Google Calendar:** Recordatorios de pagos recurrentes.
