@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
   return (
     <>
       {/* Barra superior */}
-      <nav className="bg-white text-blue-700 px-6 py-3 flex items-center justify-between shadow-sm border-b border-blue-100">
+      <nav className="bg-white text-blue-700 py-3 w-full fixed top-0 left-0 right-0 z-30 flex items-center justify-between shadow-sm border-b border-blue-100 px-6">
         <div className="flex items-center space-x-3">
           <button
             onClick={toggleMenu}
@@ -45,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser, onLogout }) => {
         </div>
 
         {/* Usuario */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 px-6">
           {currentUser?.photoURL && !imageError ? (
             <img
               src={currentUser.photoURL}
