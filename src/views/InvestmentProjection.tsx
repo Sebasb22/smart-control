@@ -10,9 +10,11 @@ export default function InvestmentProjection() {
   const [days, setDays] = useState<string>("");
   const [finalAmount, setFinalAmount] = useState<number | null>(null);
 
+  // Formatea el monto con separador de miles (1.000, 10.000, etc)
   const formatAmount = (value: string) => {
-    // Reemplaza comas y elimina caracteres no numéricos
-    return value.replace(/[^0-9,]/g, "").replace(",", ".");
+    const numeric = value.replace(/\D/g, "");
+    if (!numeric) return "";
+    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
   const calculateProjection = () => {
@@ -65,6 +67,8 @@ export default function InvestmentProjection() {
         </label>
         <input
           type="text"
+          inputMode="numeric"
+          pattern="[0-9.]*"
           placeholder="Ingresa el monto inicial"
           value={initialAmount}
           onChange={(e) => setInitialAmount(formatAmount(e.target.value))}

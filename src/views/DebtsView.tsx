@@ -196,11 +196,16 @@ const DebtDetailView: React.FC<DetailProps> = ({
             <FiDollarSign className="text-red-400" /> Monto total
           </label>
           <input
-            type="number"
-            value={debt.montoTotal}
-            onChange={(e) =>
-              setDebt({ ...debt, montoTotal: Number(e.target.value) })
-            }
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9.]*"
+            value={debt.montoTotal
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+            onChange={(e) => {
+              const numeric = e.target.value.replace(/\D/g, "");
+              setDebt({ ...debt, montoTotal: Number(numeric) });
+            }}
             className="w-full p-2 border-b border-gray-300 focus:border-red-500 bg-transparent outline-none transition text-red-700 font-semibold"
           />
         </div>
@@ -210,8 +215,10 @@ const DebtDetailView: React.FC<DetailProps> = ({
             <FiDollarSign className="text-green-400" /> Monto pagado
           </label>
           <input
-            type="number"
-            value={debt.montoPagado}
+            type="text"
+            value={debt.montoPagado
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
             readOnly
             className="w-full p-2 border-b border-gray-300 bg-gray-100 outline-none transition text-green-700 font-semibold"
           />
