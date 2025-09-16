@@ -126,7 +126,6 @@ MIT © [Sebasb22](https://github.com/Sebasb22)
 
 ## � Futuras Actualizaciones
 
-- 📌 **Categorías personalizables:** Crea y edita categorías con íconos y colores.
 - 💰 **Metas de ahorro avanzadas:** Múltiples objetivos, barra de progreso y notificaciones.
 - 🔒 **Seguridad:** 2FA, gestión de sesiones y recuperación de contraseña personalizada.
 - 📊 **Dashboard avanzado:** Gráficas interactivas, filtros y reportes inteligentes.
