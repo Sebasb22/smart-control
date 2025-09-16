@@ -136,7 +136,6 @@ MIT © [Sebasb22](https://github.com/Sebasb22)
 - 📱 **Sincronización con Google Calendar:** Recordatorios de pagos recurrentes.
 - 💼 **Exportación de datos:** Descarga tus gastos en Excel o PDF.
 - 💳 **Pagos integrados:** Stripe o PayU para pagar deudas y metas.
-- � **Modo oscuro:** Tema claro/oscuro con persistencia por usuario.
 - 📲 **PWA:** Instala la app como móvil y trabaja offline.
 - 🎙 **Asistente de voz:** Registra gastos usando comandos de voz.
 - 📈 **Analytics:** Google Analytics/Mixpanel para métricas y mejoras.
