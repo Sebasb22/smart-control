@@ -1,7 +1,7 @@
 # 💸 Smart Control - Gastos App
 
 <p align="center">
-  <img src="public/logo.svg" alt="Smart Control Logo" width="120" />
+  <img src="public/logo.svg" alt="Smart Control Logo" width="320" />
   <br />
   <span style="font-size:2rem;font-weight:bold;color:#2563eb;">Smart Control</span>
 </p>
