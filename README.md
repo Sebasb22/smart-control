@@ -1,7 +1,9 @@
 # 💸 Smart Control - Gastos App
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/placeholder/banner.png" alt="Smart Control Banner" />
+  <img src="public/logo.svg" alt="Smart Control Logo" width="120" />
+  <br />
+  <span style="font-size:2rem;font-weight:bold;color:#2563eb;">Smart Control</span>
 </p>
 
 <p align="center">
