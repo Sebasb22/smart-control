@@ -1,6 +1,11 @@
 // src/components/Login.tsx
 import { useState } from "react";
-import { signInWithPopup, signOut } from "firebase/auth";
+import {
+  signInWithPopup,
+  signOut,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import type { User, UserCredential } from "firebase/auth";
 import { auth, googleProvider, db } from "../firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -11,10 +16,30 @@ interface LoginProps {
   onLogin: (user: User) => void;
 }
 
-export default function Login({ onLogin }: LoginProps) {
+const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [showReset, setShowReset] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetMsg, setResetMsg] = useState("");
 
-  const handleLogin = async () => {
+  // 🔹 Login con correo y contraseña
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError("");
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      setUser(result.user);
+      onLogin(result.user);
+    } catch (err: any) {
+      setLoginError("Correo o contraseña incorrectos");
+    }
+  };
+
+  // 🔹 Login con Google
+  const handleGoogleLogin = async () => {
     try {
       const result: UserCredential = await signInWithPopup(
         auth,
@@ -23,7 +48,6 @@ export default function Login({ onLogin }: LoginProps) {
       const loggedUser: User = result.user;
       setUser(loggedUser);
 
-      // 🔹 Guardar usuario en Firestore
       const userRef = doc(db, "users", loggedUser.uid);
       const userSnap = await getDoc(userRef);
 
@@ -35,9 +59,6 @@ export default function Login({ onLogin }: LoginProps) {
           photoURL: loggedUser.photoURL,
           createdAt: new Date(),
         });
-        console.log("Usuario guardado en Firestore ✅");
-      } else {
-        console.log("Usuario ya existe en Firestore");
       }
 
       onLogin(loggedUser);
@@ -46,9 +67,24 @@ export default function Login({ onLogin }: LoginProps) {
     }
   };
 
+  // 🔹 Cerrar sesión
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
+  };
+
+  // 🔹 Enviar correo de recuperación
+  const handlePasswordReset = async () => {
+    if (!resetEmail) {
+      setResetMsg("Por favor ingresa tu correo.");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, resetEmail);
+      setResetMsg("Te enviamos un correo para restablecer tu contraseña.");
+    } catch (err: any) {
+      setResetMsg("Error: " + (err.message || "No se pudo enviar el correo."));
+    }
   };
 
   return (
@@ -63,39 +99,100 @@ export default function Login({ onLogin }: LoginProps) {
               </div>
             </div>
 
-            {/* Título */}
             <h2 className="text-3xl font-bold text-gray-800">Bienvenido</h2>
             <p className="text-gray-500 mt-2 mb-8">
               Administra tus finanzas fácilmente
             </p>
 
-            {/* Botón Google */}
+            {/* FORMULARIO LOGIN */}
+            <form onSubmit={handleEmailLogin} className="mb-2">
+              <input
+                type="email"
+                placeholder="Correo electrónico"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 border rounded-lg mb-2"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 border rounded-lg mb-2"
+                required
+              />
+              {loginError && (
+                <p className="text-red-500 text-sm mb-2">{loginError}</p>
+              )}
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded-lg mb-2"
+              >
+                Iniciar sesión
+              </button>
+            </form>
+
+            {/* 🔹 Botón para mostrar recuperación */}
             <button
-              onClick={handleLogin}
+              onClick={() => setShowReset(true)}
+              className="mb-4 text-sm text-blue-500 hover:underline"
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
+
+            {/* BOTÓN GOOGLE */}
+            <button
+              onClick={handleGoogleLogin}
               className="flex items-center justify-center w-full gap-3 bg-white border border-gray-300 rounded-lg px-5 py-3 font-medium text-gray-700 shadow-sm hover:shadow-md hover:bg-gray-50 transition duration-200"
             >
               <FcGoogle size={22} />
               Iniciar sesión con Google
             </button>
 
-            {/* Info extra */}
-            <p className="mt-6 text-xs text-gray-400">
-              Al continuar, aceptas nuestros{" "}
-              <span className="text-blue-500 hover:underline cursor-pointer">
-                Términos y Condiciones
-              </span>
-              .
-            </p>
+            {/* 🔹 Modal Recuperación */}
+            {showReset && (
+              <div className="mt-6 p-4 border rounded-lg bg-blue-50">
+                <h3 className="text-lg font-semibold mb-2 text-blue-700">
+                  Recuperar contraseña
+                </h3>
+                <input
+                  type="email"
+                  placeholder="Tu correo electrónico"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  className="w-full p-2 border rounded mb-2"
+                />
+                <button
+                  onClick={handlePasswordReset}
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg mt-2"
+                >
+                  Enviar correo de recuperación
+                </button>
+                {resetMsg && (
+                  <p className="mt-2 text-sm text-blue-700">{resetMsg}</p>
+                )}
+                <button
+                  onClick={() => {
+                    setShowReset(false);
+                    setResetEmail("");
+                    setResetMsg("");
+                  }}
+                  className="mt-2 text-xs text-gray-500 hover:underline"
+                >
+                  Cancelar
+                </button>
+              </div>
+            )}
           </>
         ) : (
           <>
-            {/* Bienvenida */}
+            {/* Vista después de login */}
             <h2 className="text-2xl font-semibold text-gray-800">
               Hola, {user.displayName || "Usuario"} 👋
             </h2>
             <p className="text-gray-500 text-sm mb-4">{user.email}</p>
 
-            {/* Foto de usuario */}
             <div className="flex justify-center mb-6">
               <img
                 src={user.photoURL || "https://via.placeholder.com/80"}
@@ -104,7 +201,6 @@ export default function Login({ onLogin }: LoginProps) {
               />
             </div>
 
-            {/* Botón cerrar sesión */}
             <button
               onClick={handleLogout}
               className="flex items-center justify-center gap-2 w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg shadow-md transition duration-200"
@@ -117,4 +213,6 @@ export default function Login({ onLogin }: LoginProps) {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

@@ -9,12 +9,13 @@ import {
   GoogleAuthProvider,
   reauthenticateWithPopup,
   reauthenticateWithCredential,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 // ==========================
-// Guardar usuario en Firestore (reutilizable)
+// Guardar usuario en Firestore
 // ==========================
 const saveUserToFirestore = async (user: User, name?: string) => {
   const userRef = doc(db, "users", user.uid);
@@ -36,27 +37,6 @@ const saveUserToFirestore = async (user: User, name?: string) => {
 };
 
 // ==========================
-// Login con Google
-// ==========================
-export const loginWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-
-    await saveUserToFirestore(user); // Guardar si no existe
-
-    return { ...user, displayName: user.displayName }; // Retornar con displayName
-  } catch (error: any) {
-    console.error(
-      "❌ Error al iniciar sesión con Google:",
-      error.code,
-      error.message
-    );
-    throw new Error("Error al iniciar sesión con Google. Intenta nuevamente.");
-  }
-};
-
-// ==========================
 // Registro con Email y Contraseña
 // ==========================
 export const registerWithEmail = async (
@@ -73,8 +53,7 @@ export const registerWithEmail = async (
     const user = userCredential.user;
 
     await saveUserToFirestore(user, name); // Guardar en Firestore
-
-    return { ...user, displayName: name }; // Retornar con displayName
+    return { ...user, displayName: name }; // Retornar con nombre
   } catch (error: any) {
     console.error("❌ Error al registrar usuario:", error.code, error.message);
 
@@ -101,7 +80,7 @@ export const loginWithEmail = async (email: string, password: string) => {
     );
     const user = userCredential.user;
 
-    // Traer nombre de Firestore
+    // Traer nombre desde Firestore
     const userRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userRef);
     const nombre = userDoc.exists() ? userDoc.data().nombre : undefined;
@@ -123,6 +102,50 @@ export const loginWithEmail = async (email: string, password: string) => {
 };
 
 // ==========================
+// Login con Google
+// ==========================
+export const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+
+    await saveUserToFirestore(user); // Guardar si no existe
+    return { ...user, displayName: user.displayName };
+  } catch (error: any) {
+    console.error(
+      "❌ Error al iniciar sesión con Google:",
+      error.code,
+      error.message
+    );
+    throw new Error("Error al iniciar sesión con Google. Intenta nuevamente.");
+  }
+};
+
+// ==========================
+// Recuperar contraseña
+// ==========================
+export const resetPassword = async (email: string) => {
+  if (!email)
+    throw new Error("El correo es obligatorio para restablecer la contraseña.");
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return "Correo de restablecimiento enviado. Revisa tu bandeja de entrada.";
+  } catch (error: any) {
+    console.error(
+      "❌ Error al enviar correo de restablecimiento:",
+      error.message
+    );
+
+    if (error.code === "auth/user-not-found") {
+      throw new Error("No existe una cuenta registrada con este correo.");
+    }
+
+    throw new Error("Error al enviar el correo de restablecimiento.");
+  }
+};
+
+// ==========================
 // Cerrar sesión
 // ==========================
 export const logoutUser = async () => {
@@ -135,9 +158,9 @@ export const logoutUser = async () => {
   }
 };
 
-/**
- * Reautentica al usuario antes de hacer acciones críticas como eliminar cuenta
- */
+// ==========================
+// Reautenticación (acciones críticas)
+// ==========================
 export const reauthenticateUser = async (user: User, password?: string) => {
   try {
     // Caso 1: Usuario con Google
@@ -160,7 +183,7 @@ export const reauthenticateUser = async (user: User, password?: string) => {
       throw new Error("Método de autenticación no soportado.");
     }
   } catch (error) {
-    console.error("Error durante reautenticación:", error);
+    console.error("❌ Error durante reautenticación:", error);
     throw error;
   }
 };
