@@ -120,58 +120,6 @@ MIT © [Sebasb22](https://github.com/Sebasb22)
   <img src="https://user-images.githubusercontent.com/placeholder/app-preview.png" width="600" alt="Smart Control App Preview" />
 </p>
 
-## Futuras Actualiaciones (Features)
-
-1. Mejorar lo actual (core)
-
-Estas mejoras se centran en fortalecer lo que ya tienes:
-
-📌 Categorías personalizables
-
-Permitir que el usuario cree y edite categorías como: Alimentación, Transporte, Entretenimiento, etc.
-
-Íconos y colores para identificar cada categoría.
-
-💰 Objetivos de ahorro avanzados
-
-Poder definir múltiples metas de ahorro con fecha límite.
-
-Mostrar barra de progreso y porcentaje.
-
-Notificaciones cuando esté cerca de cumplir la meta.
-
-🔒 Seguridad
-
-Verificación en dos pasos (2FA) usando correo o SMS.
-
-Gestión de sesiones activas (cerrar sesión en otros dispositivos).
-
-📩 Recuperación de contraseña personalizada
-
-En lugar de usar la página de Firebase, crear tu propio flujo de:
-
-Ingresar código recibido por correo.
-
-Definir nueva contraseña directamente en tu app.
-
-2. Funcionalidades de análisis
-
-Para que el usuario tenga insights sobre sus finanzas:
-
-📊 Dashboard avanzado
-
-Gráficas interactivas con librerías como Recharts o Chart.js.
-
-Filtros por mes, semana, categoría o método de pago.
-
-📈 Reportes inteligentes
-
-Comparación entre meses.
-
-Mostrar el gasto promedio diario, semanal y mensual.
-
-Identificar en qué categorías se gasta más.
-
 ---
 
 ## � Futuras Actualizaciones
