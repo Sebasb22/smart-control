@@ -321,7 +321,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ userId }) => {
                     </>
                   )}
 
-                  {/* Botones de acción */}
+                  {/* Botones de accion */}
                   <div className="flex space-x-2 ml-4">
                     {editingId === transaction.id ? (
                       <>
